@@ -1,0 +1,198 @@
+Create database GardenServicesMV;
+use GardenServicesMV;
+CREATE TABLE Vendor(
+    vendorID CHAR(6) NOT NULL,
+    vendorName VARCHAR(255),
+    vendorAddress VARCHAR(255),
+    vendorPhoneNumber CHAR(12)
+);
+alter table Vendor
+ADD constraint PKvendorID PRIMARY KEY(vendorID);
+
+CREATE TABLE Tool(
+    toolID CHAR(6) NOT NULL,
+    toolName VARCHAR(255),
+    vendorID CHAR(6)
+);
+alter table Tool
+ADD constraint PKtoolID PRIMARY KEY(toolID);
+alter table Tool
+ADD constraint FKvendorID FOREIGN KEY(vendorID) references
+Vendor(vendorID);
+
+CREATE TABLE GroundWorker(
+    employeeID CHAR(6) NOT NULL,
+    empFirstName VARCHAR(255),
+    empLastName VARCHAR(255),
+    dateOfBirth DATE,
+    socialSecurityNumber INT
+);
+alter table GroundWorker
+ADD constraint PKemployeeID PRIMARY KEY(employeeID);
+
+CREATE TABLE ToolLog(
+    logID CHAR(6) NOT NULL,
+    toolID CHAR(6),
+    employeeID CHAR(6),
+    logDate DATE
+);
+alter table ToolLog
+ADD constraint PKlogID PRIMARY KEY(logID);
+alter table ToolLog
+ADD constraint FKtoolID FOREIGN KEY(toolID) references
+Tool(toolID);
+alter table ToolLog
+ADD constraint FKemployeeID FOREIGN KEY(employeeID) references
+GroundWorker(employeeID);
+
+CREATE TABLE ServicesOffered(
+    serviceID CHAR(6) NOT NULL,
+    serviceName VARCHAR(255),
+    serviceDescription VARCHAR(255),
+    insuranceType VARCHAR(255)
+);
+alter table ServicesOffered
+ADD constraint PKserviceID PRIMARY KEY(serviceID);
+
+CREATE TABLE Customer(
+    customerID CHAR(6) NOT NULL,
+    customerFirstName VARCHAR(255),
+    customerLastName VARCHAR(255),
+    customerAddress VARCHAR(255),
+    customerPhoneNumber CHAR(12)
+);
+alter table Customer
+ADD constraint PKcustomerID PRIMARY KEY(customerID);
+
+CREATE TABLE ServiceRecord(
+    recordID CHAR(6) NOT NULL,
+    employeeID CHAR(6),
+    serviceDate DATE,
+    serviceID CHAR(6),
+    customerID CHAR(6)
+);
+alter table ServiceRecord
+Add constraint PKrecordID PRIMARY KEY(recordID);
+alter table ServiceRecord
+ADD constraint FKemployeeID1 FOREIGN KEY(employeeID) REFERENCES
+GroundWorker(employeeID);
+alter table ServiceRecord
+ADD constraint FKserviceID FOREIGN KEY(serviceID) REFERENCES
+ServicesOffered(serviceID);
+alter table ServiceRecord
+ADD constraint FKcustomerID FOREIGN KEY(customerID) REFERENCES
+Customer(customerID);
+
+select * from servicerecord;
+
+INSERT INTO  Vendor VALUES ('V10005','Als Decoration Makers', '1455 Pleasant Road', '545-993-6564');
+INSERT INTO  Vendor VALUES ('V12007','Ally Tools', '9696 Richland Street', '545-360-4123');
+INSERT INTO  Vendor VALUES ('V11014','Growers Plants', '3267 Sunflower Road', '589-630-0015');
+INSERT INTO  Vendor VALUES ('V10011','Knick Knack Paddywhacks', '6905 White Street', '971-555-7806');
+INSERT INTO  Vendor VALUES ('V11008','Sharpe Growery', '4408 Beltline Road', '589-880-0029');
+INSERT INTO  Vendor VALUES ('V12012','Tool Warehouse', '1100 Eisenhower Highway', '971-371-5901');
+INSERT INTO  Vendor VALUES ('V10023','Dunnigans', '3570 Falk Street', '975-636-9588');
+INSERT INTO  Vendor VALUES ('V11002','Green Trees', '6461 Ridge View Road', '589-105-6078');
+INSERT INTO  Vendor VALUES ('V11023','Lester & Smith Flowers', '6200 South Rome Street', '951-878-8411');
+INSERT INTO  Vendor VALUES ('V12067','Lumberjack Tools', '8234 Carter Street', '575-564-9137');
+
+INSERT INTO  Tool VALUES ('T12003','Iron Spade', 'V12007');
+INSERT INTO  Tool VALUES ('T14027','GTX43 Lawn Mower', 'V12012');
+INSERT INTO  Tool VALUES ('T17006','Premium Wheelbarrow', 'V12067');
+INSERT INTO  Tool VALUES ('T13024','Wheelbarrow', NULL);
+INSERT INTO  Tool VALUES ('T12008','Chainsaw', 'V12007');
+INSERT INTO  Tool VALUES ('T14016','LL Lawnmower', 'V12012');
+
+INSERT INTO  GroundWorker VALUES ('E10056','Matthew', 'Brown', '1986-01-09', '381916366');
+INSERT INTO  GroundWorker VALUES ('E10070','Michael', 'Custer', '1981-11-09', '761084302');
+INSERT INTO  GroundWorker VALUES ('E10085','Isaiah ', 'Smith', '1998-07-08', '584946275');
+INSERT INTO  GroundWorker VALUES ('E10089','Heath', 'Ortega', '2000-11-24', '379165654');
+INSERT INTO  GroundWorker VALUES ('E10094','Christopher', 'Short', '1976-07-20', '652014789');
+
+INSERT INTO  ToolLog VALUES ('L10356','T14027', 'E10056', '2021-07-11');
+INSERT INTO  ToolLog VALUES ('L10378','T12003', 'E10056', '2021-07-20');
+INSERT INTO  ToolLog VALUES ('L10384','T14027', NULL, '2021-07-24');
+INSERT INTO  ToolLog VALUES ('L10388','T17006', 'E10070', '2021-07-25');
+INSERT INTO  ToolLog VALUES ('L10394','T12003', 'E10070', '2021-08-02');
+INSERT INTO  ToolLog VALUES ('L10405','T14027', 'E10070', '2021-08-08');
+INSERT INTO  ToolLog VALUES ('L10415','T17006', 'E10070', '2021-08-10');
+INSERT INTO  ToolLog VALUES ('L10428','T14027', NULL, '2021-08-12');
+INSERT INTO  ToolLog VALUES ('L10434','T12003', 'E10085', '2021-08-16');
+INSERT INTO  ToolLog VALUES ('L10441','T17006', 'E10085', '2021-08-24');
+
+INSERT INTO  ServicesOffered VALUES ('S16123','Corporate Lawn Mowing', 'Lawn Mowing and Edging for businesses', 'Commercial Insurance');
+INSERT INTO  ServicesOffered VALUES ('S26123','Private Lawn Mowing', 'Lawn Mowing and Edging for private households', 'Residential Insurance');
+INSERT INTO  ServicesOffered VALUES ('S16125','Corporate Decorating', 'Putting up decoration for businesses', 'Commercial Insurance');
+INSERT INTO  ServicesOffered VALUES ('S26125','Private Decorating', 'Putting up decoration for private households', 'Residential Insurance');
+
+INSERT INTO  Customer VALUES ('C13123','Bill', 'Watson', '7899 Waterview Street', '686-415-9154');
+INSERT INTO  Customer VALUES ('C13158','Alexander', 'Roberts', '9390 Gold Avenue', '545-000-7001');
+INSERT INTO  Customer VALUES ('C13178','Ralph', 'Samson', '4946 Winston Street Suite 283', '686-480-3135');
+INSERT INTO  Customer VALUES ('C13188','Matilda', 'Baxter', '7359 Mapleshade Drive', '910-470-1181');
+INSERT INTO  Customer VALUES ('C13191','Beth', 'Peterson', '6903 Bluestone Road', '951-933-6621');
+INSERT INTO  Customer VALUES ('C13198','Ayush', 'Singh', '1880 Thomas Drive', '712-524-4218');
+INSERT INTO  Customer VALUES ('C13208','Jorge', 'Espinoza', '6810 East 16th Street', '951-993-7860');
+INSERT INTO  Customer VALUES ('C13217','Albert', 'Waterhouse', '8108 Sterling Street', '686-097-8381');
+
+INSERT INTO  ServiceRecord VALUES ('R15444','E10056', '2021-07-10', 'S16123', 'C13123');
+INSERT INTO  ServiceRecord VALUES ('R15449', NULL, '2021-07-14', 'S16123', 'C13188');
+INSERT INTO  ServiceRecord VALUES ('R15458','E10070', '2021-07-17', 'S16125', NULL);
+INSERT INTO  ServiceRecord VALUES ('R15689','E10070', '2021-08-27', 'S16123', 'C13123');
+INSERT INTO  ServiceRecord VALUES ('R15714',NULL, '2021-09-01', 'S16125', 'C13123');
+INSERT INTO  ServiceRecord VALUES ('R15728','E10085', '2021-09-04', 'S26125', 'C13191');
+INSERT INTO  ServiceRecord VALUES ('R15739','E10089', '2021-09-08', 'S26123', 'C13191');
+INSERT INTO  ServiceRecord VALUES ('R15779','E10094', '2021-09-12', 'S26123', NULL);
+INSERT INTO  ServiceRecord VALUES ('R15791','E10094', '2021-09-17', 'S26123', 'C13208');
+INSERT INTO  ServiceRecord VALUES ('R15840','E10094', '2021-09-25', 'S26123', 'C13217');
+
+--Show all employees who have used Tool T14027 (INNER JOIN)
+SELECT DISTINCT GW.employeeID, GW.empFirstName, GW.empLastName, TL.toolID
+FROM GroundWorker GW
+INNER JOIN ToolLog TL
+ON GW.employeeID = TL.employeeID
+WHERE TL.toolID = "T14027";
+
+--show all customers and all service records, and which customers correspond to which service records (FULL JOIN)
+SELECT *
+FROM ServiceRecord SR
+LEFT JOIN Customer C
+ON SR.customerID = C.customerID
+UNION ALL
+SELECT *
+FROM ServiceRecord SR
+RIGHT JOIN Customer C
+ON SR.customerID = C.customerID
+WHERE SR.customerID is NULL;
+
+--Show all vendors and which tools they provide, if any (LEFT JOIN)
+SELECT V.vendorID, V.vendorName, T.toolName
+FROM Vendor V
+LEFT JOIN Tool T
+ON V.vendorID = T.vendorID;
+
+--Show tool log and all ground workers whether or not they have used tools (RIGHT JOIN)
+SELECT T.logID, T.logDate, G.empFirstName, G.empLastName
+FROM ToolLog T
+RIGHT JOIN GroundWorker G
+ON T.employeeID = G.employeeID;
+
+--Show the names of all employees who have used a tool (Intersect)
+SELECT empFirstName, empLastName
+FROM GroundWorker
+WHERE employeeID  IN
+(SELECT employeeID FROM ToolLog);
+
+--Show all vendor addresses and customer addresses to get an idea of where to build a new office (UNION)
+SELECT vendorAddress FROM Vendor
+UNION
+SELECT customerAddress FROM Customer;
+
+
+--Show the customer ID and customer name of the customers who have not had any services (EXCEPT)
+SELECT c.customerID, c.customerFirstName, c.customerLastName
+FROM Customer c
+WHERE not EXISTS
+(SELECT c.customerID
+from ServiceRecord s
+WHERE s.customerID = c.customerID);
+
